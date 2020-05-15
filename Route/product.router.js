@@ -18,13 +18,25 @@ productRoutes.route("/add").post(function (req, res) {
 });
 
 productRoutes.route("/").get(function (req, res) {
-  Product.find(function (err, products) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.status(200).json({ success: true, data: products });
-    }
-  });
+  let category = req.query.category;
+
+  if (category) {
+    Product.find({ categoryName: category }, function (err, products) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).json({ success: true, data: products });
+      }
+    });
+  } else {
+    Product.find(function (err, products) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).json({ success: true, data: products });
+      }
+    });
+  }
 });
 
 productRoutes.route("/:id").get(function (req, res) {
